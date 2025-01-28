@@ -82,7 +82,9 @@ export class AppComponent {
     const worksheet = XLSX.utils.json_to_sheet(messages);
     const authorMaxWidth = messages.map(messages => messages.author ? messages.author.length : 0).reduce((w, r) => Math.max(w, r), 10);
     worksheet["!cols"] = [{ wch: 14 }, { wch: authorMaxWidth }, { wch: 50 }];
+    worksheet["!cols"][10] = { wch: 13.38 };
     this.formatColumn(worksheet, 0, 'm/d/yyyy h:mm');
+    worksheet['!autofilter'] = { ref: "A1:K1" };
     return worksheet;
   }
 

@@ -22,21 +22,28 @@ export class AppComponent {
       reader.readAsText(this.file);
       reader.onload = () => {
         const text = reader.result as string;
-        const messages = whatsapp.parseString(text);
+        const messages = whatsapp.parseString(text).map(message => ({ ...message, message: message.message.replace(/[\r\n]+/g, " ") }));
         console.log(messages);
         const workbook = XLSX.utils.book_new();
-        const worksheet = this.createWorksheet(messages);
-        XLSX.utils.book_append_sheet(workbook, worksheet, 'All Chats');
+        this.createFilteredAndUnfilteredWorksheet(workbook, 'All Chats', messages);
         const names = [...new Set(messages.map(message => message.author))].filter(name => name) as string[];
         names.forEach(name => {
-          const nameWorksheet = this.createWorksheet(messages.filter(message => message.author === name));
-          XLSX.utils.book_append_sheet(workbook, nameWorksheet, name);
+          this.createFilteredAndUnfilteredWorksheet(workbook, name, messages.filter(message => message.author === name))
         })
         const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
         const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
         FileSaver.saveAs(blob, 'exported_data.xlsx');
       };
     }
+  }
+
+  createFilteredAndUnfilteredWorksheet(workbook: XLSX.WorkBook, sheetName: string, messages: whatsapp.Message[]) {
+    const worksheet = this.createWorksheet(messages);
+    XLSX.utils.book_append_sheet(workbook, worksheet, sheetName);
+    const worksheetFiltered = this.createWorksheet(messages.filter(message => /in.*\d+.*out.*\d+/.test(message.message.toLowerCase())));
+    XLSX.utils.book_append_sheet(workbook, worksheetFiltered, `${sheetName} Filtered`);
+    const worksheetFiltered2 = this.createWorksheet(messages.filter(message => /\d+./.test(message.message) && !/in.*\d+.*out.*\d+/.test(message.message.toLowerCase())));
+    XLSX.utils.book_append_sheet(workbook, worksheetFiltered2, `${sheetName} Filtered 2`);
   }
 
   createWorksheet(messages: whatsapp.Message[]) {

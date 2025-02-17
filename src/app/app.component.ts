@@ -10,7 +10,7 @@ import { Message } from './message';
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
-  cardsWords = ['cards', 'uth', 'stud', 'ms', '3cp', '1cp', 'bj', 'blackjack'];
+  cardsWords = ['cards', 'uth', 'stud', 'ms', '3cp', '1cp', 'ocp', 'tcp', 'bj', 'blackjack'];
   audreyWords = ['start', 'bdp', 'bd', 'sj', 'bl', 'lbl', 'chd', 'msd', 'cmd', 'lmd', 'csd', 'dl', 'dlg', 'gi5', 'gl', 'rl', 'lol', 'pyl', 'sdjw', 'rts', 'sxr', 'rr', 'pp', 'tgt', 'tbs', 'twd', 'tjg', 'wsdr', 'wsds', 'wre', 'cws', 'w4c', 'w4cb', 'w4cf', 'w4cp', 'w4cw'];
   freeplayWords = ['fsp', 'freeplay'];
   w2gWords = ['w2g', 'taxes', 'tax'];

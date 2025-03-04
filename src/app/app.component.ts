@@ -33,8 +33,8 @@ export class AppComponent {
           const message = msg?.message;
           const inMatch = message?.match(/(?<=in.*)\d+\.*\d*/i);
           const outMatch = message?.match(/(?<=out.*)\d+\.*\d*/i);
-          const additionalInMatch = message?.match(/(?<=in.*)(?<!.*out.*)(?<=\+\w*)\d+\.*\d*/ig);
-          const additionalOutMatch = message?.match(/(?<=out.*)(?<=\+\w*)\d+\.*\d*/ig);
+          const additionalInMatch = message?.match(/(?<=in.*)(?<!.*out.*)(?<=\+\s*)\d+\.*\d*/ig);
+          const additionalOutMatch = message?.match(/(?<=out.*)(?<=\+\s*)\d+\.*\d*/ig);
           let moneyIn: number | '' = inMatch ? +inMatch[0] : '';
           if (additionalInMatch) {
             additionalInMatch.forEach(inMatch => {
@@ -52,7 +52,7 @@ export class AppComponent {
           const audrey = this.matchesAnyWord(this.audreyWords, message) ? 'Yes' : '';
           const freeplay = this.matchesAnyWord(this.freeplayWords, message) ? 'Yes' : '';
           const w2g = this.matchesAnyWord(this.w2gWords, message) ? 'Yes' : '';
-          const multipleInOut = /\+\w*\d+/.test(message) ? 'Yes' : '';
+          const multipleInOut = /\+\s*\d+/.test(message) ? 'Yes' : '';
           return { ...msg, in: moneyIn, out, net, cards, audrey, freeplay, w2g, multipleInOut };
         });
         console.log(messages);

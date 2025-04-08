@@ -64,7 +64,7 @@ export class AppComponent {
         })
         const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
         const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-        FileSaver.saveAs(blob, 'exported_data.xlsx');
+        FileSaver.saveAs(blob, this.file?.name.replace(/\.txt/, '.xlsx'));
       };
     }
   }

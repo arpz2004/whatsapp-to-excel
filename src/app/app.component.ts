@@ -10,8 +10,8 @@ import { Message } from './message';
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
-  cardsWords = ['cards', 'uth', 'stud', 'ms', '3cp', '1cp', 'bj', 'blackjack', 'baccarat', 'huh'];
-  audreyWords = ['start', 'bdp', 'bd', 'sj', 'bl', 'lbl', 'chd', 'msd', 'cmd', 'lmd', 'csd', 'dl', 'dlg', 'gi5', 'gl', 'rl', 'lol', 'pyl', 'sdjw', 'rts', 'sxr', 'rr', 'pp', 'tgt', 'tbs', 'twd', 'tjg', 'wsdr', 'wsds', 'wre', 'cws', 'w4c', 'w4cb', 'w4cf', 'w4cp', 'w4cw'];
+  cardsWords = ['cards', 'uth', 'stud', 'ms', '3cp', '1cp', 'ocp', 'tcp', 'bj', 'blackjack', 'baccarat', 'huh'];
+  audreyWords = ['start', 'bdp', 'bd', 'bde', 'sj', 'bl', 'lbl', 'chd', 'msd', 'cmd', 'lmd', 'csd', 'dl', 'dlg', 'gi5', 'gl', 'rl', 'lol', 'pl', 'pyl', 'sdjw', 'rts', 'sxr', 'rr', 'pp', 'tgt', 'tbs', 'twd', 'tjg', 'wsdr', 'wsds', 'wre', 'cws', 'w4c', 'w4cb', 'w4cf', 'w4cp', 'w4cw'];
   freeplayWords = ['fsp', 'freeplay'];
   w2gWords = ['w2g', 'taxes', 'tax'];
   multipleInOutWords = ['\\+'];
@@ -52,7 +52,7 @@ export class AppComponent {
           const audrey = this.matchesAnyWord(this.audreyWords, message) ? 'Yes' : '';
           const freeplay = this.matchesAnyWord(this.freeplayWords, message) ? 'Yes' : '';
           const w2g = this.matchesAnyWord(this.w2gWords, message) ? 'Yes' : '';
-          const multipleInOut = /\+\w*\d+/.test(message) ? 'Yes' : '';
+          const multipleInOut = /\+\s*\d+/.test(message) ? 'Yes' : '';
           return { ...msg, in: moneyIn, out, net, cards, audrey, freeplay, w2g, multipleInOut };
         });
         console.log(messages);
@@ -64,7 +64,7 @@ export class AppComponent {
         })
         const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
         const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-        FileSaver.saveAs(blob, 'exported_data.xlsx');
+        FileSaver.saveAs(blob, this.file?.name.replace(/\.txt/, '.xlsx'));
       };
     }
   }

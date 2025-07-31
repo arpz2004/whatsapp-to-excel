@@ -10,7 +10,7 @@ import { Message } from './message';
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
-  cardsWords = ['cards', 'uth', 'stud', 'ms', '3cp', '1cp', 'bj', 'blackjack'];
+  cardsWords = ['cards', 'uth', 'stud', 'ms', '3cp', '1cp', 'bj', 'blackjack', 'baccarat', 'huh'];
   audreyWords = ['start', 'bdp', 'bd', 'sj', 'bl', 'lbl', 'chd', 'msd', 'cmd', 'lmd', 'csd', 'dl', 'dlg', 'gi5', 'gl', 'rl', 'lol', 'pyl', 'sdjw', 'rts', 'sxr', 'rr', 'pp', 'tgt', 'tbs', 'twd', 'tjg', 'wsdr', 'wsds', 'wre', 'cws', 'w4c', 'w4cb', 'w4cf', 'w4cp', 'w4cw'];
   freeplayWords = ['fsp', 'freeplay'];
   w2gWords = ['w2g', 'taxes', 'tax'];
@@ -31,10 +31,10 @@ export class AppComponent {
         const whatsAppMessages = whatsapp.parseString(text).map(message => ({ ...message, message: message.message.replace(/[\r\n]+/g, " ") }));
         const messages: Message[] = whatsAppMessages.map(msg => {
           const message = msg?.message;
-          const inMatch = message?.match(/(?<=in.*)\d+\.*\d*/i);
-          const outMatch = message?.match(/(?<=out.*)\d+\.*\d*/i);
-          const additionalInMatch = message?.match(/(?<=in.*)(?<!.*out.*)(?<=\+\w*)\d+\.*\d*/ig);
-          const additionalOutMatch = message?.match(/(?<=out.*)(?<=\+\w*)\d+\.*\d*/ig);
+          const inMatch = message?.match(/(?<=\bin\b.*)\d+\.*\d*/i);
+          const outMatch = message?.match(/(?<=\b(out|o)\b.*)\d+\.*\d*/i);
+          const additionalInMatch = message?.match(/(?<=\bin\b.*)(?<!.*\b(out|o)\b.*)(?<=\+\w*)\d+\.*\d*/ig);
+          const additionalOutMatch = message?.match(/(?<=\b(out|o)\b.*)(?<=\+\w*)\d+\.*\d*/ig);
           let moneyIn: number | '' = inMatch ? +inMatch[0] : '';
           if (additionalInMatch) {
             additionalInMatch.forEach(inMatch => {
@@ -72,9 +72,9 @@ export class AppComponent {
   createFilteredAndUnfilteredWorksheet(workbook: XLSX.WorkBook, sheetName: string, messages: whatsapp.Message[]) {
     const worksheet = this.createWorksheet(messages);
     XLSX.utils.book_append_sheet(workbook, worksheet, sheetName);
-    const worksheetFiltered = this.createWorksheet(messages.filter(message => /in.*\d+.*out.*\d+/i.test(message.message)));
+    const worksheetFiltered = this.createWorksheet(messages.filter(message => /\bin\b.*\d+.*\b(out|o)\b.*\d+/i.test(message.message)));
     XLSX.utils.book_append_sheet(workbook, worksheetFiltered, `${sheetName} Filtered`);
-    const worksheetFiltered2 = this.createWorksheet(messages.filter(message => /\d+./.test(message.message) && !/in.*\d+.*out.*\d+/i.test(message.message)));
+    const worksheetFiltered2 = this.createWorksheet(messages.filter(message => /\d+./.test(message.message) && !/in.*\d+.*\b(out|o)\b.*\d+/i.test(message.message)));
     XLSX.utils.book_append_sheet(workbook, worksheetFiltered2, `${sheetName} Filtered 2`);
   }
 

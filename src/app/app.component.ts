@@ -30,7 +30,7 @@ export class AppComponent {
         const text = reader.result as string;
         const whatsAppMessages = whatsapp.parseString(text).map(message => ({ ...message, message: message.message.replace(/[\r\n]+/g, " ") }));
         const messages: Message[] = whatsAppMessages.map(msg => {
-          const message = msg?.message;
+          const message = msg?.message?.replaceAll(',', '');
           const inMatch = message?.match(/(?<=\bin\b.*)\d+\.*\d*/i);
           const outMatch = message?.match(/(?<=\b(out|o)\b.*)\d+\.*\d*/i);
           const additionalInMatch = message?.match(/(?<=\bin\b.*)(?<!.*\b(out|o)\b.*)(?<=\+\w*)\d+\.*\d*/ig);
